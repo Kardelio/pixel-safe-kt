@@ -42,21 +42,27 @@ class Decrypter {
                 } else {
                     currentCodeCount++
                 }
-//                println("======")
-//                println("----> ${code[codeIterator].toString().toInt()}")
-//                println("+++> ${STANDARD_CODE[standardCodeIterator]}")
 
                 when (STANDARD_CODE[standardCodeIterator]) {
                     'R' -> {
-                        messageOut += red.toChar()
+                        if (red != 0) {
+                            messageOut += red.toChar()
+                        }
                     }
                     'G' -> {
-                        messageOut += green.toChar()
+                        if (green != 0) {
+                            messageOut += green.toChar()
+                        }
                     }
+
                     'B' -> {
-                        messageOut += blue.toChar()
+                        if (blue != 0) {
+                            messageOut += blue.toChar()
+                        }
                     }
                 }
+                // NOTE:
+                // Counter does the full 100 row so message of 165 will go to 199 (200)
                 counter++
             }
         }

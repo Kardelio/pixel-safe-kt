@@ -1,10 +1,7 @@
 package pixel.safe.kt
 
 import java.awt.Color
-import java.awt.Graphics2D
 import java.awt.image.BufferedImage
-import java.io.File
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class Encrypter {
@@ -16,18 +13,14 @@ class Encrypter {
     }
 
     fun crypt(fileContents: ArrayList<Char>, code: String, outFile: String = "out.png") {
-        println("Cryppppt EN")
-//        println("${fileContents}")
-        println("${code}")
-
         var usualableWidth = MAX_WIDTH
-        if(fileContents.size < MAX_WIDTH){
+        if (fileContents.size < MAX_WIDTH) {
             usualableWidth = fileContents.size
         }
 
         var requiredHeight = fileContents.size / MAX_WIDTH
         // Handle remainder
-        if(requiredHeight < fileContents.size){
+        if (requiredHeight < fileContents.size) {
             requiredHeight++
         }
         println("size: ${fileContents.size}")
@@ -51,32 +44,34 @@ class Encrypter {
             val a = Integer.toHexString(randomA)
             val b = Integer.toHexString(randomB)
 
-            if(currentCodeCount > (code[codeIterator].toString().toInt() - 1)){
+            if (currentCodeCount > (code[codeIterator].toString().toInt() - 1)) {
                 currentCodeCount = 1
                 codeIterator++
                 standardCodeIterator++
-                if(codeIterator > (code.length - 1)){
+                if (codeIterator > (code.length - 1)) {
                     codeIterator = 0
                 }
-                if(standardCodeIterator > (STANDARD_CODE.length - 1)){
+                if (standardCodeIterator > (STANDARD_CODE.length - 1)) {
                     standardCodeIterator = 0
                 }
             } else {
                 currentCodeCount++
             }
-//            println("======")
-//            println("----> ${code[codeIterator].toString().toInt()}")
-//            println("+++> ${STANDARD_CODE[standardCodeIterator]}")
 
-            when(STANDARD_CODE[standardCodeIterator]){
+            var valOfChar = Integer.toHexString(it.code)
+            if (valOfChar.length == 1) {
+                valOfChar = "0$valOfChar"
+            }
+
+            when (STANDARD_CODE[standardCodeIterator]) {
                 'R' -> {
-                    g2d.color = Color.decode("#${Integer.toHexString(it.code)}${a}${b}")
+                    g2d.color = Color.decode("#${valOfChar}${a}${b}")
                 }
                 'G' -> {
-                    g2d.color = Color.decode("#${a}${Integer.toHexString(it.code)}${b}")
+                    g2d.color = Color.decode("#${a}${valOfChar}${b}")
                 }
                 'B' -> {
-                    g2d.color = Color.decode("#${a}${b}${Integer.toHexString(it.code)}")
+                    g2d.color = Color.decode("#${a}${b}${valOfChar}")
                 }
             }
             g2d.fillRect(rowCounter, colCounter, 1, 1)
@@ -91,8 +86,3 @@ class Encrypter {
         FileManager.writeImageToFile(outFile, bfImg)
     }
 }
-
-/*
-takes a message
-takes a code (RGBRGB)
- */

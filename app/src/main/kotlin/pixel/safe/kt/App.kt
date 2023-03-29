@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
 
     parser.parse(args)
 
-    println("Mode -> ${convertModeStringToMode(mode).title}")
+    println("Mode -> ${mode.convertModeStringToMode().title}")
     println("Code -> ${code}")
     println("File to crypt -> ${fileToCrypt}")
     println("Output File to put intp -> ${outputFile}")
@@ -57,28 +57,23 @@ fun main(args: Array<String>) {
 //    }
 //    ImageDrawer.drawToFile("test4")
 
-    when (convertModeStringToMode(mode)) {
+    when (mode.convertModeStringToMode()) {
         Mode.DECRYPT -> {
-
-            val enc = Decrypter()
-            val out = enc.crypt(FileManager.getFile(fileToCrypt), code)
+            val out = Decrypter().crypt(FileManager.getFile(fileToCrypt), code)
             println("RESULT: ---> ")
             println(out)
-
         }
         Mode.ENCRYPT -> {
-            val enc = Encrypter()
-            val b = FileManager.readFileToCharArray(FileManager.getFile(fileToCrypt))
-            if (b != null) {
-                enc.crypt(b, code, outputFile)
+            FileManager.readFileToCharArray(FileManager.getFile(fileToCrypt))?.let {
+                Encrypter().crypt(it, code, outputFile)
             }
         }
     }
 
 }
 
-fun convertModeStringToMode(modeStr: String): Mode {
-    return when (modeStr) {
+fun String.convertModeStringToMode(): Mode {
+    return when (this) {
         "e" -> {
             Mode.ENCRYPT
         }
